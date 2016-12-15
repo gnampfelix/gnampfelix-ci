@@ -9,7 +9,7 @@ import (
 func main() {
     notificationRouter := NewRouter()
     initLogger(os.Stdout, os.Stdout, os.Stdout)
-    //notificationRouter.POST("/notifications", handleIncomingNotification)
+    notificationRouter.POST("/notifications", handleIncomingNotification)
 
     middleware := Middleware{}
     middleware.Add(notificationRouter)
@@ -20,9 +20,9 @@ func main() {
     }
 
     if config.PreventHTTPS {
-        err = http.ListenAndServe(":" + strconv.Itoa(config.Port), nil)
+        err = http.ListenAndServe(":" + strconv.Itoa(config.Port), middleware)
     } else {
-        err = http.ListenAndServeTLS(":" + strconv.Itoa(config.Port), config.Certificate, config.Keyfile, nil)
+        err = http.ListenAndServeTLS(":" + strconv.Itoa(config.Port), config.Certificate, config.Keyfile, middleware)
     }
     if err != nil {
         Error.Fatal(err)
