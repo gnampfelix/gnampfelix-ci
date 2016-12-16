@@ -1,20 +1,29 @@
-package main
+//	Package to handle common routing operations.
+package middleware
 
 import (
 	"net/http"
 )
 
-//	A Middleware combines multiple Middleware
+//	A Middleware combines multiple http.Handler
 type Middleware []http.Handler
 type MiddlewareResponseWriter struct {
 	http.ResponseWriter
 	isWritten bool
 }
 
+//	Create a new, empty Middleware.
+func New() Middleware {
+	return Middleware{}
+}
+
+//	Add an existing http.Handler to the middleware.
 func (m *Middleware) Add(handler http.Handler) {
 	*m = append(*m, handler)
 }
 
+//	Iterates over each HTTP-Handler. If a handler reacts and writes to the response,
+//	the loop stops. If no handler reacts, http.NotFound() is called.
 func (m Middleware) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	mw := NewMiddlewareResponseWriter(w)
 

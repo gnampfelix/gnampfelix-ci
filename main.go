@@ -4,17 +4,19 @@ import (
     "net/http"
     "os"
     "strconv"
+    "github.com/Thamtham/gnampfelix-ci/middleware"
+    "github.com/Thamtham/gnampfelix-ci/config"
 )
 
 func main() {
-    notificationRouter := NewRouter()
     initLogger(os.Stdout, os.Stdout, os.Stdout)
-    notificationRouter.POST("/notifications", handleIncomingNotification)
+    notificationRouter := middleware.NewRouter()
+    notificationRouter.POST("/notifications", middleware.HandleIncomingNotification)
 
-    middleware := Middleware{}
+    middleware := middleware.New()
     middleware.Add(notificationRouter)
-
-    config, err := readConfing()
+    config.SetLogger(Error, Warning, Info)
+    config, err := config.ReadFile()
     if err != nil {
         Error.Fatal(err)
     }
