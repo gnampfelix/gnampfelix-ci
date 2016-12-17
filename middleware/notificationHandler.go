@@ -31,7 +31,20 @@ func HandleIncomingNotification(writer http.ResponseWriter, request *http.Reques
         writer.WriteHeader(http.StatusAccepted)
         return
     case "push":
-
+        var push events.Push
+        err := decoder.Decode(&push)
+        if err != nil {
+            errorLog.Println(err)
+            http.Error(writer, err.Error(), http.StatusBadRequest)
+            return
+        }
+        infoLog.Printf("Incoming push event for %s, starting build run.\n", push.Repository.Name)
+        err = push.HandleEvent()
+        if err != nil {
+            errorLog.Println(err)
+        }
+        writer.WriteHeader(http.StatusAccepted)
+        return
     default:
         http.NotFound(writer, request)
     }
