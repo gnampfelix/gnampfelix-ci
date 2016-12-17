@@ -18,8 +18,14 @@ func HandleIncomingNotification(writer http.ResponseWriter, request *http.Reques
         var ping events.Ping
         err := decoder.Decode(&ping)
         if err != nil {
-            warningLog.Println(err)
+            errorLog.Println(err)
             http.Error(writer, err.Error(), http.StatusBadRequest)
+            return
+        }
+        infoLog.Printf("Incoming ping for %s, starting verification.\n", ping.Repository.Name)
+        if !ping.HasValidConfiguration() {
+            errorLog.Printf("The ping for %s does not have a valid configuration file.\n", ping.Repository.Name)
+            http.Error(writer, "No valid configuration for this repository found.", http.StatusNotAcceptable)
             return
         }
         writer.WriteHeader(http.StatusAccepted)

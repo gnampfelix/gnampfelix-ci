@@ -3,6 +3,7 @@ package events
 import (
     "encoding/json"
     "github.com/Thamtham/gnampfelix-ci/domain"
+    "github.com/Thamtham/gnampfelix-ci/config"
     "errors"
 )
 
@@ -57,6 +58,10 @@ func (p *Ping)UnmarshalJSON(data []byte) error {
 //      - "{repoName}.json" in the ci rootFolder
 //      - valid handling for each event that is noted in the ping
 //  A valid handling is determined by the config file itself.
-func (p Ping)HasValidConfiguration(rootFolder string) bool {
+func (p Ping)HasValidConfiguration() bool {
+    _, err := config.ReadRepoConfig(p.Repository.Name)
+    if err != nil {
+        return false
+    }
     return true
 }

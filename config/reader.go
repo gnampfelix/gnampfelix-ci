@@ -19,6 +19,7 @@ import (
     "bytes"
     "log"
     "os"
+    "github.com/Thamtham/gnampfelix-ci/domain"
 )
 
 type ConfigFile struct {
@@ -33,12 +34,20 @@ var (
     errorLog *log.Logger
     warningLog *log.Logger
     infoLog *log.Logger
+    currentConfig ConfigFile
 )
 
 func init() {
     infoLog = log.New(os.Stdout, "[INFO]\t\t", 0)
     warningLog = log.New(os.Stdout, "[WARNING]\t\t", 0)
     errorLog = log.New(os.Stdout, "[ERROR]\t\t", 0)
+    currentConfig = ConfigFile{
+        Port: 443,
+        Keyfile: "key.ppk",
+        Certificate: "certificate.pem",
+        CiRoot: "./",
+        PreventHTTPS: false,
+    }
 }
 
 //  Set the Logger for the configuration file handling.
@@ -73,8 +82,6 @@ func (c *ConfigFile)UnmarshalJSON(data []byte) error {
     if !ok {
         if c.PreventHTTPS {
             c.Port = 80
-        } else {
-            c.Port = 443
         }
     } else {
         c.Port = int(tmpPort)
@@ -83,14 +90,12 @@ func (c *ConfigFile)UnmarshalJSON(data []byte) error {
 
     c.Keyfile, ok = resultMap["Keyfile"].(string)
     if !ok {
-        c.Keyfile = "key.ppk"
         warningLog.Printf("No keyfile specified. Using default name.\n")
     }
     infoLog.Printf("Using %s as keyfile.\n", c.Keyfile)
 
     c.Certificate, ok = resultMap["Certificate"].(string)
     if !ok {
-        c.Certificate = "certificate.pem"
         warningLog.Printf("No certificate specified. Using default name.\n")
     }
     infoLog.Printf("Using %s as certificate.\n", c.Certificate)
@@ -105,19 +110,45 @@ func (c *ConfigFile)UnmarshalJSON(data []byte) error {
 }
 
 //  Tries to read the "gnampfile" in the current directory and to convert it into
-//  a ConfigFile
+//  a ConfigFile. If the file could not be read correctly, the last working file
+//  is returned. If no last config exists, an empty config is returned.
 func ReadFile() (ConfigFile, error) {
-    var config ConfigFile
     var compactData bytes.Buffer
     data, err := ioutil.ReadFile("gnampfile")
     if err != nil {
-        return ConfigFile{}, err
+        return currentConfig, err
     }
     err = json.Compact(&compactData, data)
     if err != nil {
-        return ConfigFile{}, err
+        return currentConfig, err
     }
-    err = json.Unmarshal(compactData.Bytes(), &config)
+    err = json.Unmarshal(compactData.Bytes(), &currentConfig)
+    if err != nil {
+        return currentConfig, err
+    }
 
-    return config, nil
+    return currentConfig, nil
+}
+
+//  Based on the current valid config (or the default config) of the main application,
+//  ReafRepoConfig reads the configuration file of the given repo and converts
+//  it into a domain.RepoConfig object.
+func ReadRepoConfig(repoName string) (domain.RepoConfig, error) {
+    var compactData bytes.Buffer
+    var repoConfig domain.RepoConfig
+    data, err := ioutil.ReadFile(currentConfig.CiRoot + repoName + ".json")
+    if err != nil {
+        return domain.RepoConfig{}, err
+    }
+    err = json.Compact(&compactData, data)
+    if err != nil {
+        return domain.RepoConfig{}, err
+    }
+
+    err = json.Unmarshal(compactData.Bytes(), &repoConfig)
+    if err != nil {
+        return domain.RepoConfig{}, err
+    }
+
+    return repoConfig, nil
 }

@@ -15,7 +15,7 @@ var (
 
 func init() {
     infoLog = log.New(os.Stdout, "[INFO]\t\t", 0)
-    warningLog = log.New(os.Stdout, "[WARNING]\t\t", 0)
+    warningLog = log.New(os.Stdout, "[WARNING]\t", 0)
     errorLog = log.New(os.Stdout, "[ERROR]\t\t", 0)
 }
 
