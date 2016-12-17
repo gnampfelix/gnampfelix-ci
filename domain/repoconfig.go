@@ -1,7 +1,7 @@
 package domain
 
 type RepoConfig struct {
-    Actions map[string]Action[]
+    Actions map[string][]Action
 }
 
 type Action struct {

@@ -73,5 +73,5 @@ func buildRouter() *httprouter.Router {
 }
 
 func saveConfigurationFile() {
-    ioutil.WriteFile("gnampfelix-ci-tests.json", []byte(emptyConfigFile), 0)
+    ioutil.WriteFile("gnampfelix-ci-tests.json", []byte(validConfigFile), 0)
 }

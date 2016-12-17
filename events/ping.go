@@ -59,9 +59,30 @@ func (p *Ping)UnmarshalJSON(data []byte) error {
 //      - valid handling for each event that is noted in the ping
 //  A valid handling is determined by the config file itself.
 func (p Ping)HasValidConfiguration() bool {
-    _, err := config.ReadRepoConfig(p.Repository.Name)
+    repoConfig, err := config.ReadRepoConfig(p.Repository.Name)
     if err != nil {
         return false
+    }
+    if !p.hasValidEvents(repoConfig) {
+        return false
+    }
+    return true
+}
+
+func (p Ping)hasValidEvents(repoConfig domain.RepoConfig) bool {
+    events := p.Hook.Events
+    found := false
+    for _, event := range events {
+        for configEvent := range repoConfig.Actions {
+            if configEvent == event {
+                found = true
+                break
+            }
+        }
+        if !found {
+            return false    //  --> the ping announces an event that is not
+                            //  recognized by the config
+        }
     }
     return true
 }

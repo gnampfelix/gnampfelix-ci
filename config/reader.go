@@ -135,7 +135,7 @@ func ReadFile() (ConfigFile, error) {
 //  it into a domain.RepoConfig object.
 func ReadRepoConfig(repoName string) (domain.RepoConfig, error) {
     var compactData bytes.Buffer
-    var repoConfig domain.RepoConfig
+    var actions map[string][]domain.Action
     data, err := ioutil.ReadFile(currentConfig.CiRoot + repoName + ".json")
     if err != nil {
         return domain.RepoConfig{}, err
@@ -145,10 +145,9 @@ func ReadRepoConfig(repoName string) (domain.RepoConfig, error) {
         return domain.RepoConfig{}, err
     }
 
-    err = json.Unmarshal(compactData.Bytes(), &repoConfig)
+    err = json.Unmarshal(compactData.Bytes(), &actions)
     if err != nil {
         return domain.RepoConfig{}, err
     }
-
-    return repoConfig, nil
+    return domain.RepoConfig{actions}, nil
 }

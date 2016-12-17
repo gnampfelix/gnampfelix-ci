@@ -393,8 +393,9 @@ var notificationPingInvalid = `
       }
     }
 `
-var emptyConfigFile = `
+var validConfigFile = `
 {
-
+    "push":[],
+    "pull_request":[]
 }
 `
