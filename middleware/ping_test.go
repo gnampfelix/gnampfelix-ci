@@ -10,7 +10,7 @@ import (
 )
 
 func TestValidPing(t *testing.T) {
-    saveConfigurationFile()
+    prepareTestEnvironment()
     postPayload := strings.NewReader(notificationPingValid)
     req, err := http.NewRequest("POST", "/notifications", postPayload)
     if err != nil {
@@ -29,7 +29,7 @@ func TestValidPing(t *testing.T) {
 }
 
 func TestValidPingInvalidConfig(t *testing.T) {
-    saveConfigurationFile()
+    prepareTestEnvironment()
     postPayload := strings.NewReader(notificationPingValidInvalidConfig)
     req, err := http.NewRequest("POST", "/notifications", postPayload)
     if err != nil {
@@ -48,7 +48,7 @@ func TestValidPingInvalidConfig(t *testing.T) {
 }
 
 func TestInvalidPing(t *testing.T) {
-    saveConfigurationFile()
+    prepareTestEnvironment()
     postPayload := strings.NewReader(notificationPingInvalid)
     req, err := http.NewRequest("POST", "/notifications", postPayload)
     if err != nil {
@@ -72,6 +72,8 @@ func buildRouter() *httprouter.Router {
     return notificationRouter
 }
 
-func saveConfigurationFile() {
+func prepareTestEnvironment() {
     ioutil.WriteFile("gnampfelix-ci-tests.json", []byte(validConfigFile), 0)
+    ioutil.WriteFile("pre.sh", []byte(validPreTest), 0)
+    ioutil.WriteFile("test.sh", []byte(validTest), 0)
 }

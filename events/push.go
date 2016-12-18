@@ -45,7 +45,14 @@ func (p *Push)UnmarshalJSON(data []byte) error {
     return nil
 }
 
+//  Handle the Push event:
+//  Find the matching action for this event in the configFile, clone the repo
+//  execute the actions and remove the repo again. The output of this steps
+//  TODO: will be saved in a file.
 func (p Push)HandleEvent() error {
+    mainConfig := config.GetConfig()
+    var git domain.Git
+
     configFile, err := config.ReadRepoConfig(p.Repository.Name)
     if err != nil {
         return err
@@ -54,7 +61,20 @@ func (p Push)HandleEvent() error {
     if err != nil {
         return err
     }
-    tmp, err := action.Run()
-    fmt.Println(tmp)
+
+    git.CreateNewGit(configFile.Username, configFile.AccessToken, p.Repository)
+    gitResult, err := git.Clone()
+    fmt.Println(string(gitResult))
+    if err != nil {
+        return err
+    }
+
+    tmp, err := action.Run(mainConfig.CiRoot)
+    if err != nil {
+        return err
+    }
+
+    gitResult, err = git.Remove()
+    fmt.Println(string(tmp))
     return err
 }

@@ -130,12 +130,16 @@ func ReadFile() (ConfigFile, error) {
     return currentConfig, nil
 }
 
+func GetConfig() ConfigFile {
+    return currentConfig
+}
+
 //  Based on the current valid config (or the default config) of the main application,
 //  ReafRepoConfig reads the configuration file of the given repo and converts
 //  it into a domain.RepoConfig object.
 func ReadRepoConfig(repoName string) (domain.RepoConfig, error) {
     var compactData bytes.Buffer
-    var actions map[string][]domain.Action
+    var repoConfig domain.RepoConfig
     data, err := ioutil.ReadFile(currentConfig.CiRoot + repoName + ".json")
     if err != nil {
         return domain.RepoConfig{}, err
@@ -145,9 +149,9 @@ func ReadRepoConfig(repoName string) (domain.RepoConfig, error) {
         return domain.RepoConfig{}, err
     }
 
-    err = json.Unmarshal(compactData.Bytes(), &actions)
+    err = json.Unmarshal(compactData.Bytes(), &repoConfig)
     if err != nil {
         return domain.RepoConfig{}, err
     }
-    return domain.RepoConfig{actions}, nil
+    return repoConfig, nil
 }

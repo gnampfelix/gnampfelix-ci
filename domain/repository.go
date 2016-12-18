@@ -6,6 +6,7 @@ import (
 
 type Repository struct {
     Name string `json:"name"`
+    CloneURL string `json:"clone_url"`
 }
 
 func CreateRepositoryFromMap(data map[string]interface{}) (Repository, error) {
@@ -14,5 +15,10 @@ func CreateRepositoryFromMap(data map[string]interface{}) (Repository, error) {
         return Repository{}, errors.New("Can't read repository data, missing name.")
     }
 
-    return Repository{Name: name}, nil
+    cloneUrl, ok := data["clone_url"].(string)
+    if !ok {
+        return Repository{}, errors.New("Can't read repository data, missing clone url.")
+    }
+
+    return Repository{Name: name, CloneURL: cloneUrl}, nil
 }

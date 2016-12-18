@@ -7,24 +7,30 @@ import (
 
 //  A RepoConfig is the configuration file for a repository in gci.
 //      {
-//          "push":[
-//              {
-//                  "Branches": [...],
-//                  "PreTest": "xyz.sh",
-//                  "Test": "abc.sh",
-//                  "Deployment": currentlyNotSupported
-//              },
-//              {
-//                  "Branches": [...],
-//                  "PreTest": "xyz.sh",
-//                  "Test": "abc.sh",
-//                  "Deployment": currentlyNotSupported
-//              },
-//          ],
-//          "pull_request":[]
+//          "actions":{
+//              "push":[
+//                  {
+//                      "Branches": [...],
+//                      "PreTest": "xyz.sh",
+//                      "Test": "abc.sh",
+//                      "Deployment": currentlyNotSupported
+//                  },
+//                  {
+//                      "Branches": [...],
+//                      "PreTest": "xyz.sh",
+//                      "Test": "abc.sh",
+//                      "Deployment": currentlyNotSupported
+//                  },
+//              ],
+//              "pull_request":[],
+//          },
+//          "user":"UserName",
+//          "token": "token"
 //      }
 type RepoConfig struct {
-    Actions map[string][]Action
+    Actions map[string][]Action `json:"actions"`
+    Username string `json:"user"`
+    AccessToken string `json:"token"`
 }
 
 //  With the given git ref, GetAction returns the action first action that has
@@ -61,15 +67,16 @@ type Action struct {
     Deploy Deployment
 }
 
-func (a Action)Run() ([]byte, error) {
-    cmd := exec.Command(a.PreTest)
+func (a Action)Run(ciRoot string) ([]byte, error) {
+    cmd := exec.Command("/bin/sh", ciRoot + a.PreTest)
     output, err := cmd.CombinedOutput()
     if err != nil {
         return output, err
     }
 
-    cmd = exec.Command(a.Test)
-    output, err = cmd.CombinedOutput()
+    cmd = exec.Command("/bin/sh", ciRoot + a.Test)
+    testOutput, err := cmd.CombinedOutput()
+    output  = append(output, testOutput...)
     if err != nil {
         return output, err
     }

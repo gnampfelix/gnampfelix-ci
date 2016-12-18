@@ -393,9 +393,184 @@ var notificationPingInvalid = `
       }
     }
 `
+var notificationPushValid = `
+{
+  "ref": "refs/heads/master",
+  "before": "778fa27e2259b995db4b78cb4fa58e28873a26fe",
+  "after": "22d235c9ca5f84a6b332645a8612eec8e363cd30",
+  "created": false,
+  "deleted": false,
+  "forced": false,
+  "base_ref": null,
+  "compare": "https://github.com/Thamtham/gnampfelix-ci-tests/compare/778fa27e2259...22d235c9ca5f",
+  "commits": [
+    {
+      "id": "22d235c9ca5f84a6b332645a8612eec8e363cd30",
+      "tree_id": "65b5b78c78d6530fa6f661cc68cc3a5e9ab0c0b3",
+      "distinct": true,
+      "message": "Update Readme.md",
+      "timestamp": "2016-12-15T19:13:12+01:00",
+      "url": "https://github.com/Thamtham/gnampfelix-ci-tests/commit/22d235c9ca5f84a6b332645a8612eec8e363cd30",
+      "author": {
+        "name": "Felix S",
+        "email": "feli-x-seidel@gmx.de",
+        "username": "Thamtham"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "username": "web-flow"
+      },
+      "added": [
+
+      ],
+      "removed": [
+
+      ],
+      "modified": [
+        "README.md"
+      ]
+    }
+  ],
+  "head_commit": {
+    "id": "22d235c9ca5f84a6b332645a8612eec8e363cd30",
+    "tree_id": "65b5b78c78d6530fa6f661cc68cc3a5e9ab0c0b3",
+    "distinct": true,
+    "message": "Update Readme.md",
+    "timestamp": "2016-12-15T19:13:12+01:00",
+    "url": "https://github.com/Thamtham/gnampfelix-ci-tests/commit/22d235c9ca5f84a6b332645a8612eec8e363cd30",
+    "author": {
+      "name": "Felix S",
+      "email": "feli-x-seidel@gmx.de",
+      "username": "Thamtham"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "username": "web-flow"
+    },
+    "added": [
+
+    ],
+    "removed": [
+
+    ],
+    "modified": [
+      "README.md"
+    ]
+  },
+  "repository": {
+    "id": 76581419,
+    "name": "gnampfelix-ci-tests",
+    "full_name": "Thamtham/gnampfelix-ci-tests",
+    "owner": {
+      "name": "Thamtham",
+      "email": "feli-x-seidel@gmx.de"
+    },
+    "private": true,
+    "html_url": "https://github.com/Thamtham/gnampfelix-ci-tests",
+    "description": null,
+    "fork": false,
+    "url": "https://github.com/Thamtham/gnampfelix-ci-tests",
+    "forks_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/forks",
+    "keys_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/keys{/key_id}",
+    "collaborators_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/collaborators{/collaborator}",
+    "teams_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/teams",
+    "hooks_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/hooks",
+    "issue_events_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/issues/events{/number}",
+    "events_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/events",
+    "assignees_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/assignees{/user}",
+    "branches_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/branches{/branch}",
+    "tags_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/tags",
+    "blobs_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/git/blobs{/sha}",
+    "git_tags_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/git/tags{/sha}",
+    "git_refs_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/git/refs{/sha}",
+    "trees_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/git/trees{/sha}",
+    "statuses_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/statuses/{sha}",
+    "languages_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/languages",
+    "stargazers_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/stargazers",
+    "contributors_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/contributors",
+    "subscribers_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/subscribers",
+    "subscription_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/subscription",
+    "commits_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/commits{/sha}",
+    "git_commits_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/git/commits{/sha}",
+    "comments_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/comments{/number}",
+    "issue_comment_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/issues/comments{/number}",
+    "contents_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/contents/{+path}",
+    "compare_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/compare/{base}...{head}",
+    "merges_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/merges",
+    "archive_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/{archive_format}{/ref}",
+    "downloads_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/downloads",
+    "issues_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/issues{/number}",
+    "pulls_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/pulls{/number}",
+    "milestones_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/milestones{/number}",
+    "notifications_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/notifications{?since,all,participating}",
+    "labels_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/labels{/name}",
+    "releases_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/releases{/id}",
+    "deployments_url": "https://api.github.com/repos/Thamtham/gnampfelix-ci-tests/deployments",
+    "created_at": 1481823159,
+    "updated_at": "2016-12-15T17:32:39Z",
+    "pushed_at": 1481825592,
+    "git_url": "git://github.com/Thamtham/gnampfelix-ci-tests.git",
+    "ssh_url": "git@github.com:Thamtham/gnampfelix-ci-tests.git",
+    "clone_url": "https://github.com/Thamtham/gnampfelix-ci-tests.git",
+    "svn_url": "https://github.com/Thamtham/gnampfelix-ci-tests",
+    "homepage": null,
+    "size": 0,
+    "stargazers_count": 0,
+    "watchers_count": 0,
+    "language": null,
+    "has_issues": true,
+    "has_downloads": true,
+    "has_wiki": true,
+    "has_pages": false,
+    "forks_count": 0,
+    "mirror_url": null,
+    "open_issues_count": 0,
+    "forks": 0,
+    "open_issues": 0,
+    "watchers": 0,
+    "default_branch": "master",
+    "stargazers": 0,
+    "master_branch": "master"
+  },
+  "pusher": {
+    "name": "Thamtham",
+    "email": "feli-x-seidel@gmx.de"
+  },
+  "sender": {
+    "login": "Thamtham",
+    "id": 10077533,
+    "avatar_url": "https://avatars.githubusercontent.com/u/10077533?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/Thamtham",
+    "html_url": "https://github.com/Thamtham",
+    "followers_url": "https://api.github.com/users/Thamtham/followers",
+    "following_url": "https://api.github.com/users/Thamtham/following{/other_user}",
+    "gists_url": "https://api.github.com/users/Thamtham/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/Thamtham/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/Thamtham/subscriptions",
+    "organizations_url": "https://api.github.com/users/Thamtham/orgs",
+    "repos_url": "https://api.github.com/users/Thamtham/repos",
+    "events_url": "https://api.github.com/users/Thamtham/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/Thamtham/received_events",
+    "type": "User",
+    "site_admin": false
+  }
+}
+`
+
 var validConfigFile = `
 {
-    "push":[],
-    "pull_request":[]
+    "actions": {
+        "push":[
+        {
+            "Branches": ["refs/heads/master"],
+            "PreTest": "pre.sh",
+            "Test": "test.sh"
+        }
+        ],
+        "pull_request":[]
+    }
 }
 `
