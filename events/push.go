@@ -53,28 +53,32 @@ func (p Push)HandleEvent() error {
     mainConfig := config.GetConfig()
     var git domain.Git
 
-    configFile, err := config.ReadRepoConfig(p.Repository.Name)
+    repoConfig, err := config.ReadRepoConfig(p.Repository.Name)
     if err != nil {
         return err
     }
-    action, err := configFile.GetAction(p.Ref, "push")
+    action, err := repoConfig.GetAction(p.Ref, "push")
     if err != nil {
         return err
     }
 
-    git.CreateNewGit(configFile.Username, configFile.AccessToken, p.Repository)
+    git.CreateNewGit(repoConfig.Username, repoConfig.AccessToken, p.Repository)
     gitResult, err := git.Clone()
     fmt.Println(string(gitResult))
     if err != nil {
         return err
     }
 
-    tmp, err := action.Run(mainConfig.CiRoot)
+    actionOutput, err := action.Run(mainConfig.CiRoot)
     if err != nil {
         return err
     }
+    fmt.Println(string(actionOutput))
 
     gitResult, err = git.Remove()
-    fmt.Println(string(tmp))
+    if err != nil {
+        return err
+    }
+    fmt.Println(string(gitResult))
     return err
 }

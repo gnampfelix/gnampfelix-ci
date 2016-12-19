@@ -59,26 +59,3 @@ func (r *RepoConfig)GetAction(ref string, event string) (Action, error) {
     }
     return Action{}, errors.New("The config does not specify an action for this event and this ref. No default found.")
 }
-
-type Action struct {
-    Branches []string
-    PreTest string
-    Test string
-    Deploy Deployment
-}
-
-func (a Action)Run(ciRoot string) ([]byte, error) {
-    cmd := exec.Command("/bin/sh", ciRoot + a.PreTest)
-    output, err := cmd.CombinedOutput()
-    if err != nil {
-        return output, err
-    }
-
-    cmd = exec.Command("/bin/sh", ciRoot + a.Test)
-    testOutput, err := cmd.CombinedOutput()
-    output  = append(output, testOutput...)
-    if err != nil {
-        return output, err
-    }
-    return output, nil
-}

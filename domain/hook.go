@@ -4,6 +4,8 @@ import (
     "errors"
 )
 
+//  Hook represents all the necessary data that is send as the "hook" part
+//  of the GitHub ping.
 type Hook struct {
     Events []string `json:"events"`
 }

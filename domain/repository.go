@@ -4,6 +4,8 @@ import (
     "errors"
 )
 
+//  A repository represents the "naked" repository data without any further
+//  repository handling like clone, commit or push.
 type Repository struct {
     Name string `json:"name"`
     CloneURL string `json:"clone_url"`
