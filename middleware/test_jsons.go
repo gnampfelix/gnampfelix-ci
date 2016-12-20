@@ -571,6 +571,8 @@ var validConfigFile = `
         }
         ],
         "pull_request":[]
-    }
+    },
+    "User": "Thamtham",
+    "Token": "774b7670bb68f364c182f0a2094821b6cd646331"
 }
 `

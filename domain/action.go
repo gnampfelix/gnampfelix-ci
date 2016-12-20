@@ -1,3 +1,9 @@
+package domain
+
+import (
+    "os/exec"
+)
+
 //  An action maps two scripts and one deployment method to a arbitrary number of
 //  branches. See RepoConfig for an example.
 type Action struct {

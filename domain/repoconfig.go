@@ -2,7 +2,6 @@ package domain
 
 import (
     "errors"
-    "os/exec"
 )
 
 //  A RepoConfig is the configuration file for a repository in gci.

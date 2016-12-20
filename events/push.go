@@ -12,6 +12,7 @@ import (
 //  assigned to. The type Push represents this notification for further computation.
 type Push struct {
     Ref string
+    Sha string
     Repository domain.Repository
 }
 
@@ -30,6 +31,11 @@ func (p *Push)UnmarshalJSON(data []byte) error {
         return errors.New("The push could not be read, missing ref.")
     }
 
+    sha, ok := resultMap["after"].(string)
+    if !ok {
+        return errors.New("The push could not be read, missing sha (\"after\").")
+    }
+
     repoMap, ok := resultMap["repository"].(map[string]interface{})
     if !ok {
         return errors.New("The push could not be read, missing repository information.")
@@ -42,6 +48,7 @@ func (p *Push)UnmarshalJSON(data []byte) error {
 
     p.Ref = ref
     p.Repository = repository
+    p.Sha = sha
     return nil
 }
 
@@ -51,7 +58,11 @@ func (p *Push)UnmarshalJSON(data []byte) error {
 //  TODO: will be saved in a file.
 func (p Push)HandleEvent() error {
     mainConfig := config.GetConfig()
-    var git domain.Git
+    var (
+        git domain.Git
+        gitHub domain.GitHub
+        status domain.Status
+    )
 
     repoConfig, err := config.ReadRepoConfig(p.Repository.Name)
     if err != nil {
@@ -63,22 +74,37 @@ func (p Push)HandleEvent() error {
     }
 
     git.CreateNewGit(repoConfig.Username, repoConfig.AccessToken, p.Repository)
+    gitHub = domain.GitHub{Git:git}
+
+    p.postStatusAndPrint(gitHub, status.Pending("http://google.de"))
+
     gitResult, err := git.Clone()
     fmt.Println(string(gitResult))
     if err != nil {
+        p.postStatusAndPrint(gitHub, status.Error("http://google.de"))
         return err
     }
 
     actionOutput, err := action.Run(mainConfig.CiRoot)
     if err != nil {
+        p.postStatusAndPrint(gitHub, status.Error("http://google.de"))
         return err
     }
     fmt.Println(string(actionOutput))
 
     gitResult, err = git.Remove()
     if err != nil {
+        p.postStatusAndPrint(gitHub, status.Error("http://google.de"))
         return err
     }
     fmt.Println(string(gitResult))
+    p.postStatusAndPrint(gitHub, status.Success("http://google.de"))
     return err
+}
+
+func (p Push)postStatusAndPrint(gitHub domain.GitHub, status domain.Status) {
+    err := gitHub.PostStatus(status, p.Sha)
+    if err != nil {
+        fmt.Println(err)
+    }
 }
