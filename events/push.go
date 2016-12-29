@@ -6,6 +6,8 @@ import (
     "encoding/json"
     "errors"
     "fmt"
+    "os"
+    "time"
 )
 
 //  GitHub sends a push notification after each push on the repo the webhook is
@@ -55,7 +57,7 @@ func (p *Push)UnmarshalJSON(data []byte) error {
 //  Handle the Push event:
 //  Find the matching action for this event in the configFile, clone the repo
 //  execute the actions and remove the repo again. The output of this steps
-//  TODO: will be saved in a file.
+//  will be saved in a file.
 func (p Push)HandleEvent() error {
     mainConfig := config.GetConfig()
     var (
@@ -78,26 +80,33 @@ func (p Push)HandleEvent() error {
 
     p.postStatusAndPrint(gitHub, status.Pending("http://google.de"))
 
+    fileName := time.Now().Format("02-01-2006_15-04-05") + ".log"
+    logFile, err := os.Create(fileName)
+    if err != nil {
+        return err
+    }
+    defer logFile.Close()
+
     gitResult, err := git.Clone()
-    fmt.Println(string(gitResult))
+    logFile.Write(gitResult)
     if err != nil {
         p.postStatusAndPrint(gitHub, status.Error("http://google.de"))
         return err
     }
 
     actionOutput, err := action.Run(mainConfig.CiRoot)
+    logFile.Write(actionOutput)
     if err != nil {
         p.postStatusAndPrint(gitHub, status.Error("http://google.de"))
         return err
     }
-    fmt.Println(string(actionOutput))
 
     gitResult, err = git.Remove()
+    logFile.Write(gitResult)
     if err != nil {
         p.postStatusAndPrint(gitHub, status.Error("http://google.de"))
         return err
     }
-    fmt.Println(string(gitResult))
     p.postStatusAndPrint(gitHub, status.Success("http://google.de"))
     return err
 }

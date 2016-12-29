@@ -30,6 +30,22 @@ func (git Git)Clone() ([]byte, error) {
     return output, err
 }
 
+//  Checkout the specified branch. The output and any errors of this action are
+//  returned.
+func (git Git)Checkout(newBranch string) ([]byte, error) {
+    cmd := exec.Command("git", "checkout", newBranch)
+    output, err := cmd.CombinedOutput()
+    return output, err
+}
+
+//  Merge the specified branch into the current branch. The output and any errors
+//  if this action are returned.
+func (git Git)Merge(compareBranch string) ([]byte, error) {
+    cmd := exec.Command("git", "merge", compareBranch)
+    output, err := cmd.CombinedOutput()
+    return output, err
+}
+
 //  Remove the git repository from the file system. The output and any errors of
 //  actions are returned.
 func (git Git)Remove() ([]byte, error) {
