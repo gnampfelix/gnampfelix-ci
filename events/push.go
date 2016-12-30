@@ -2,20 +2,14 @@ package events
 
 import (
     "github.com/Thamtham/gnampfelix-ci/domain"
-    "github.com/Thamtham/gnampfelix-ci/config"
     "encoding/json"
     "errors"
-    "fmt"
-    "os"
-    "time"
 )
 
 //  GitHub sends a push notification after each push on the repo the webhook is
 //  assigned to. The type Push represents this notification for further computation.
 type Push struct {
-    Ref string
-    Sha string
-    Repository domain.Repository
+    Event
 }
 
 //  Push implements Unmarshaler. This is due to the fact that golang currently
@@ -28,7 +22,7 @@ func (p *Push)UnmarshalJSON(data []byte) error {
         return err
     }
 
-    ref, ok := resultMap["ref"].(string)
+    ref, ok := resultMap["ref"].(string) //TODO: Extract only the branch name!
     if !ok {
         return errors.New("The push could not be read, missing ref.")
     }
@@ -48,72 +42,35 @@ func (p *Push)UnmarshalJSON(data []byte) error {
         return err
     }
 
-    p.Ref = ref
-    p.Repository = repository
-    p.Sha = sha
+    event, err := newEvent(ref, sha, "push", repository)
+    if err != nil {
+        return err
+    }
+    p.Event = event
     return nil
 }
 
 //  Handle the Push event:
 //  Find the matching action for this event in the configFile, clone the repo
 //  execute the actions and remove the repo again. The output of this steps
-//  will be saved in a file.
+//  will be saved in a file. The file is closed afterwards.
 func (p Push)HandleEvent() error {
-    mainConfig := config.GetConfig()
-    var (
-        git domain.Git
-        gitHub domain.GitHub
-        status domain.Status
-    )
+    p.Event.connectWithGitHub()
+    defer p.Event.cleanUp()
+    p.Event.postPending()
 
-    repoConfig, err := config.ReadRepoConfig(p.Repository.Name)
+    err := p.Event.cloneRepoAndCheckout()
     if err != nil {
-        return err
-    }
-    action, err := repoConfig.GetAction(p.Ref, "push")
-    if err != nil {
+        p.Event.postFailure()
         return err
     }
 
-    git.CreateNewGit(repoConfig.Username, repoConfig.AccessToken, p.Repository)
-    gitHub = domain.GitHub{Git:git}
-
-    p.postStatusAndPrint(gitHub, status.Pending("http://google.de"))
-
-    fileName := time.Now().Format("02-01-2006_15-04-05") + ".log"
-    logFile, err := os.Create(fileName)
+    err = p.Event.runAction()
     if err != nil {
-        return err
-    }
-    defer logFile.Close()
-
-    gitResult, err := git.Clone()
-    logFile.Write(gitResult)
-    if err != nil {
-        p.postStatusAndPrint(gitHub, status.Error("http://google.de"))
+        p.Event.postFailure()
         return err
     }
 
-    actionOutput, err := action.Run(mainConfig.CiRoot)
-    logFile.Write(actionOutput)
-    if err != nil {
-        p.postStatusAndPrint(gitHub, status.Error("http://google.de"))
-        return err
-    }
-
-    gitResult, err = git.Remove()
-    logFile.Write(gitResult)
-    if err != nil {
-        p.postStatusAndPrint(gitHub, status.Error("http://google.de"))
-        return err
-    }
-    p.postStatusAndPrint(gitHub, status.Success("http://google.de"))
+    p.Event.postSuccess()
     return err
-}
-
-func (p Push)postStatusAndPrint(gitHub domain.GitHub, status domain.Status) {
-    err := gitHub.PostStatus(status, p.Sha)
-    if err != nil {
-        fmt.Println(err)
-    }
 }

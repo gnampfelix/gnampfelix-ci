@@ -33,7 +33,7 @@ func (git Git)Clone() ([]byte, error) {
 //  Checkout the specified branch. The output and any errors of this action are
 //  returned.
 func (git Git)Checkout(newBranch string) ([]byte, error) {
-    cmd := exec.Command("git", "checkout", newBranch)
+    cmd := exec.Command("git", "--git-dir=" + git.Repo.Name + "/.git", "--work-tree=" + git.Repo.Name,"checkout", newBranch)
     output, err := cmd.CombinedOutput()
     return output, err
 }
