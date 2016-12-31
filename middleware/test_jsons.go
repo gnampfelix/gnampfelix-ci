@@ -565,7 +565,7 @@ var validConfigFile = `
     "actions": {
         "push":[
         {
-            "Branches": ["refs/heads/master"],
+            "Branches": ["master"],
             "PreTest": "pre.sh",
             "Test": "test.sh"
         }

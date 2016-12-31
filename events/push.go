@@ -4,6 +4,7 @@ import (
     "github.com/Thamtham/gnampfelix-ci/domain"
     "encoding/json"
     "errors"
+    "strings"
 )
 
 //  GitHub sends a push notification after each push on the repo the webhook is
@@ -22,10 +23,13 @@ func (p *Push)UnmarshalJSON(data []byte) error {
         return err
     }
 
-    ref, ok := resultMap["ref"].(string) //TODO: Extract only the branch name!
+    fullRef, ok := resultMap["ref"].(string) //TODO: Extract only the branch name!
     if !ok {
         return errors.New("The push could not be read, missing ref.")
     }
+
+    refs := strings.Split(fullRef, "/")
+    ref := refs[len(refs)-1]
 
     sha, ok := resultMap["after"].(string)
     if !ok {
