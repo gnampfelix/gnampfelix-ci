@@ -1,8 +1,8 @@
 package events
 
 import (
-    "github.com/Thamtham/gnampfelix-ci/domain"
-    "github.com/Thamtham/gnampfelix-ci/config"
+    "github.com/gnampfelix/gnampfelix-ci/domain"
+    "github.com/gnampfelix/gnampfelix-ci/config"
     "os"
     "time"
 )

@@ -19,7 +19,7 @@ import (
     "bytes"
     "log"
     "os"
-    "github.com/Thamtham/gnampfelix-ci/domain"
+    "github.com/gnampfelix/gnampfelix-ci/domain"
 )
 
 type ConfigFile struct {

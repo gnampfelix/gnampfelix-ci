@@ -4,8 +4,8 @@ import (
     "net/http"
     "os"
     "strconv"
-    "github.com/Thamtham/gnampfelix-ci/middleware"
-    "github.com/Thamtham/gnampfelix-ci/config"
+    "github.com/gnampfelix/gnampfelix-ci/middleware"
+    "github.com/gnampfelix/gnampfelix-ci/config"
 )
 
 func main() {

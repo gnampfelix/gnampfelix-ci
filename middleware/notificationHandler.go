@@ -3,7 +3,7 @@ package middleware
 import (
     "net/http"
     "github.com/julienschmidt/httprouter"
-    "github.com/Thamtham/gnampfelix-ci/events"
+    "github.com/gnampfelix/gnampfelix-ci/events"
     "encoding/json"
 )
 

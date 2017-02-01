@@ -2,8 +2,8 @@ package events
 
 import (
     "encoding/json"
-    "github.com/Thamtham/gnampfelix-ci/domain"
-    "github.com/Thamtham/gnampfelix-ci/config"
+    "github.com/gnampfelix/gnampfelix-ci/domain"
+    "github.com/gnampfelix/gnampfelix-ci/config"
     "errors"
 )
 
