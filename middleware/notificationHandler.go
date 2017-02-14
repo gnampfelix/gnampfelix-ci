@@ -18,6 +18,9 @@ func HandleIncomingNotification(writer http.ResponseWriter, request *http.Reques
     case "push":
         handlePush(writer, decoder)
         return
+    case "pull_request":
+        handlePullRequest(writer, decoder)
+        return;
     default:
         http.NotFound(writer, request)
     }
@@ -48,6 +51,21 @@ func handlePush(writer http.ResponseWriter, decoder *json.Decoder) {
     }
     infoLog.Printf("Incoming push event for %s, starting build run.\n", push.Repository.Name)
     err = push.HandleEvent()
+    if err != nil {
+        errorLog.Println(err)
+    }
+    writer.WriteHeader(http.StatusAccepted)
+}
+
+func handlePullRequest(writer http.ResponseWriter, decoder *json.Decoder) {
+    var pullRequest events.PullRequest
+    err := decoder.Decode(&pullRequest)
+    if err != nil {
+        printAndWriteError(writer, err)
+        return
+    }
+    infoLog.Printf("Incoming pull_request event for %s, starting build run.\n", pullRequest.Repository.Name)
+    err = pullRequest.HandleEvent()
     if err != nil {
         errorLog.Println(err)
     }

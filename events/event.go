@@ -62,6 +62,24 @@ func (e Event)cloneRepoAndCheckout() error {
     return err
 }
 
+func (e Event)merge(compareBranch string) error {
+    //need to checkout first to make the branch known to git
+    checkoutResult, err := e.gitHub.Git.Checkout(compareBranch)
+    e.logFile.Write(checkoutResult)
+    if err != nil {
+        return err
+    }
+    //Checkout back..
+    checkoutResult, err = e.gitHub.Git.Checkout(e.Ref)
+    e.logFile.Write(checkoutResult)
+    if err != nil {
+        return err
+    }
+    mergeResult, err := e.gitHub.Git.Merge(compareBranch)
+    e.logFile.Write(mergeResult)
+    return err
+}
+
 func (e Event)runAction() error {
     actionResult, err := e.action.Run(e.mainConfig.CiRoot)
     e.logFile.Write(actionResult)

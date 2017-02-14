@@ -41,7 +41,7 @@ func (git Git)Checkout(newBranch string) ([]byte, error) {
 //  Merge the specified branch into the current branch. The output and any errors
 //  if this action are returned.
 func (git Git)Merge(compareBranch string) ([]byte, error) {
-    cmd := exec.Command("git", "merge", compareBranch)
+    cmd := exec.Command("git", "--git-dir=" + git.Repo.Name + "/.git", "--work-tree=" + git.Repo.Name, "merge", compareBranch)
     output, err := cmd.CombinedOutput()
     return output, err
 }
