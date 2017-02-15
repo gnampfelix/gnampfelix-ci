@@ -22,7 +22,7 @@ func (p *PullRequest)UnmarshalJSON(data []byte) error {
     }
 
     action, ok := resultMap["action"].(string)
-    if !ok || action != "opened" {
+    if !ok || (action != "opened" && action != "synchronize") {
         return errors.New("The pull request could not be read, missing or unsupported action.")
     }
 

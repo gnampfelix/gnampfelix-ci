@@ -73,7 +73,7 @@ func buildRouter() *httprouter.Router {
 }
 
 func prepareTestEnvironment() {
-    ioutil.WriteFile("gnampfelix-ci-tests.json", []byte(validConfigFile), 0)
-    ioutil.WriteFile("pre.sh", []byte(validPreTest), 0)
-    ioutil.WriteFile("test.sh", []byte(validTest), 0)
+    ioutil.WriteFile("gnampfelix-ci-tests.json", []byte(validConfigFile), 0444)
+    ioutil.WriteFile("pre.sh", []byte(validPreTest), 0444)
+    ioutil.WriteFile("test.sh", []byte(validTest), 0444)
 }
