@@ -26,5 +26,5 @@ func (a Action)Run(ciRoot string) ([]byte, error) {
     cmd = exec.Command("/bin/sh", ciRoot + a.Test)
     testOutput, err := cmd.CombinedOutput()
     output  = append(output, testOutput...)
-    return output, nil
+    return output, err
 }
