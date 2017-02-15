@@ -560,8 +560,7 @@ var notificationPushValid = `
 }
 `
 
-var notificationPullRequestValid = `
-{
+var notificationPullRequestValid = `{
   "action": "opened",
   "number": 2,
   "pull_request": {
@@ -982,8 +981,7 @@ var notificationPullRequestValid = `
     "type": "User",
     "site_admin": false
   }
-}
-`
+}`
 
 var validConfigFile = `
 {

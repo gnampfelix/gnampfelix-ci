@@ -10,6 +10,7 @@
 //          "Certificate": "certificate.pem",
 //          "Keyfile": "key.ppk",
 //          "CiRoot": "./",
+//          "GithubSecret": "abcdefg"
 //      }
 package config
 
@@ -28,6 +29,7 @@ type ConfigFile struct {
     Certificate string
     PreventHTTPS bool
     CiRoot string
+    GithubSecret string
 }
 
 var (
@@ -47,6 +49,7 @@ func init() {
         Certificate: "certificate.pem",
         CiRoot: "./",
         PreventHTTPS: false,
+        GithubSecret: "",
     }
 }
 
@@ -105,6 +108,11 @@ func (c *ConfigFile)UnmarshalJSON(data []byte) error {
         c.CiRoot = "./"
     }
     infoLog.Printf("CI-Root folder is %s.\n", c.CiRoot)
+
+    c.GithubSecret, ok = resultMap["GithubSecret"].(string)
+    if !ok {
+        c.GithubSecret = ""
+    }
 
     return nil
 }
