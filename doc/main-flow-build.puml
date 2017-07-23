@@ -1,0 +1,37 @@
+@startuml
+
+!include style.puml
+
+partition Main {
+(*) -right-> "Parse incoming request"
+if "Request.IsValid() && Repo.IsKnown()" then
+-right-> [true]"Clone repo"
+    --> "Parse gnampfile"
+    -left-> "Notify SCM: Pending"
+    --> "Start build environment"
+    -right-> ==STARTBUILDER==
+    --> ==ENDBUILDER==
+    -left-> "Post SCM result"
+    --> "Insert result in DB"
+    --> (*)
+else
+    -left-> [false]"Return Error"
+    --> (*)
+endif
+}
+
+partition Builder {
+    ==STARTBUILDER==-right-> "Execute prepare script"
+    -right-> "Execute test script"
+    --> "Execute post script"
+    -left-> "Return exit code"
+    note bottom
+        0 = Success
+        1 = Error in Prepare
+        2 = Error in Test
+        3 = Error in Post
+    endnote
+    --> ==ENDBUILDER==
+}
+
+@enduml

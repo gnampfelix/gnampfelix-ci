@@ -1,0 +1,22 @@
+@startuml
+skinparam backgroundColor #D8DEE9
+skinparam shadowing false
+skinparam defaultFontName Arctic
+skinparam defaultFontColor #2E3440
+
+skinparam note {
+    BorderColor #EBCB8B
+    BackgroundColor #EBCB8B
+}
+skinparam activity {
+  StartColor #2E3440
+  BarColor #5E81AC
+  EndColor #2E3440
+  BorderColor #5E81AC
+  BackgroundColor #ECEFF4
+  ArrowColor #2E3440
+}
+skinparam package {
+    BorderColor #BF616A
+}
+@enduml
