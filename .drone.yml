@@ -6,4 +6,5 @@ pipeline:
   build:
     image: golang:latest
     commands:
-      - go test ./...
+      - go get github.com/onsi/ginkgo/ginkgo
+      - ginkgo ./...
