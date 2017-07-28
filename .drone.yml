@@ -6,8 +6,4 @@ pipeline:
   build:
     image: golang:latest
     commands:
-        # Go does not respect the test dependencies.. manual it is
-      - go get github.com/onsi/ginkgo
-      - go get github.com/onsi/gomega
-      - go get ./...
       - go test ./...
