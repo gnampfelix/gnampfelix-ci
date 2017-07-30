@@ -1,0 +1,33 @@
+@startuml
+
+!include style.puml
+partition Create() {
+    (*) --> "Create Docker container"
+    -right-> "Mount shell scripts"
+    note top
+        Mount in the ./buildId folder
+        pre.sh
+        test.sh
+        post.sh
+    endnote
+}
+
+partition OutputStream() {
+    --> "Return stdout"
+}
+
+partition StartBuild() {
+    -right-> "Run docker container detached"
+}
+
+partition Wait() {
+    -up-> "Wait until container exits"
+    -up> "Analyze exit code"
+}
+
+partition Destroy() {
+    -right-> "Remove container"
+}
+--> (*)
+
+@enduml

@@ -36,9 +36,9 @@ var _ = Describe("RepoConfig", func() {
 		Expect(t).Should(Not(BeNil()))
 	})
 
-	It("should return \"nil\" environment", func() {
+	It("should return \"default\" environment", func() {
 		env := a.GetEnvironment()
-		Expect(env).Should(BeNil())
+		Expect(env).Should(Not(BeNil()))
 	})
 
 	It("should return pre-script", func() {

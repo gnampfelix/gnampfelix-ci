@@ -1,5 +1,5 @@
-*.sh
 !vendor
 *.log
 pkg/*/*.html
 doc/*.json
+tests
