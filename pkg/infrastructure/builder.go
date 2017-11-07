@@ -26,7 +26,7 @@ type BuildEnvironment interface {
 	Create(buildId string) error
 	StartBuild() error
 	OutputStream() io.ReadCloser
-	Wait() //BuildResult
+	Wait() BuildResult
 	Destroy()
 }
 
@@ -61,6 +61,7 @@ func (d *defaultBuilder) Create(buildId string) error {
 	cont, err := docker.ContainerCreate(ctx, &container.Config{
 		Image:        "gnampfelix/ci-builder",
 		AttachStdout: true,
+		Tty:          true,
 	}, &container.HostConfig{
 		Binds: binds,
 	}, nil, buildId)
@@ -91,8 +92,15 @@ func (d *defaultBuilder) OutputStream() io.ReadCloser {
 	return result
 }
 
-func (d *defaultBuilder) Wait() {
-
+func (d *defaultBuilder) Wait() BuildResult {
+	ctx := context.Background()
+	resultChan, errChan := docker.ContainerWait(ctx, d.containerId, container.WaitConditionNotRunning)
+	select {
+	case resultBody := <-resultChan:
+		return IntToBuildResult(resultBody.StatusCode)
+	case <-errChan:
+		return BuildResultError
+	}
 }
 
 func (d *defaultBuilder) Destroy() {
