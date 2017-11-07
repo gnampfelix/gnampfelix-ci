@@ -104,5 +104,6 @@ func (d *defaultBuilder) Wait() BuildResult {
 }
 
 func (d *defaultBuilder) Destroy() {
-
+	ctx := context.Background()
+	_ = docker.ContainerRemove(ctx, d.containerId, types.ContainerRemoveOptions{})
 }

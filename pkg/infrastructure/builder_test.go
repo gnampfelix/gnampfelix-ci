@@ -1,8 +1,6 @@
 package infrastructure_test
 
 import (
-	//	"github.com/docker/docker/api/types"
-	//"fmt"
 	"github.com/docker/docker/client"
 	. "github.com/gnampfelix/gnampfelix-ci/pkg/infrastructure"
 	. "github.com/onsi/ginkgo"
@@ -10,7 +8,6 @@ import (
 	"golang.org/x/net/context"
 	"io/ioutil"
 	"os"
-	"os/exec"
 )
 
 //	I am not sure how to structure those test. Need to rework!
@@ -37,11 +34,9 @@ var _ = Describe("Builder - require Docker", func() {
 		})
 		AfterEach(func() {
 			os.RemoveAll("testId")
-			cmd := exec.Command("docker", "rm", "-f", "testId")
-			cmd.Run()
 		})
 
-		It("should create and start a container", func() {
+		It("should run the complete lifecycle", func() {
 			err = env.Create("testId")
 			Expect(err).Should(Succeed())
 
@@ -61,6 +56,7 @@ var _ = Describe("Builder - require Docker", func() {
 
 			buildResult := env.Wait()
 			Expect(buildResult).Should(Equal(BuildResultTestError))
+			env.Destroy()
 		})
 	})
 })
