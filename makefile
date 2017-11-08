@@ -13,3 +13,8 @@ images:
 
 clean:
 	rm doc/*.svg
+
+.PHONY: test
+test: images
+	go fmt pkg/...
+	ginkgo ./...
