@@ -11,8 +11,8 @@ if "Request.IsValid() && Repo.IsKnown()" then
     --> "Start build environment"
     -right-> ==STARTBUILDER==
     --> ==ENDBUILDER==
-    -left-> "Post SCM result"
-    --> "Insert result in DB"
+    --> "Post SCM result"
+    -left-> "Insert result in DB"
     --> (*)
 else
     -left-> [false]"Return Error"
